@@ -8,12 +8,16 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.support.ui.Select;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-public class CheckoutPage {
-    private WebDriver driver;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class CheckoutPage extends BasePage{
     public CheckoutPage(WebDriver driver) {
-        this.driver = driver;
-        //wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        PageFactory.initElements(driver, this);
+        super(driver);
+    }
+
+    public CheckoutPage(WebDriver driver, int timeOut) {
+        super(driver);
+        setTimeoutSec(timeOut);
     }
 
     @FindBy(id = "BillingNewAddress_FirstName")
@@ -39,10 +43,10 @@ public class CheckoutPage {
         lastName.sendKeys(RandomStringUtils.randomAlphabetic(1,10));
     }
     public void provideEmail() {
-        email.sendKeys(RandomStringUtils.randomAlphabetic(1,5)+"@test");
+        email.sendKeys(RandomStringUtils.randomAlphabetic(1,5)+"@test.com");
     }
     public void chooseCountry() {
-        Select country = new Select(driver.findElement(By.id("BillingNewAddress_CountryId")));
+        Select country = new Select(find(By.id("BillingNewAddress_CountryId")));
         int index = RandomUtils.nextInt(0, country.getOptions().size());
         country.selectByIndex(index);
     }
@@ -59,27 +63,28 @@ public class CheckoutPage {
         phoneNumber.sendKeys(RandomStringUtils.randomNumeric(10));
     }
     public void clickContinueAddress() {
-        driver.findElement(By.xpath("//button[@class = 'button-1 new-address-next-step-button']")).click();
+        click(By.xpath("//button[@class = 'button-1 new-address-next-step-button']"));
     }
     public void clickContinueShipping() {
-        driver.findElement(By.xpath("//button[@class = 'button-1 shipping-method-next-step-button']")).click();
+        click(By.xpath("//button[@class = 'button-1 shipping-method-next-step-button']"));
     }
     public void clickContinuePaymentMethod() {
-        driver.findElement(By.xpath("//button[@class = 'button-1 payment-method-next-step-button']")).click();
+        click(By.xpath("//button[@class = 'button-1 payment-method-next-step-button']"));
     }
     public void clickContinuePaymentInfo() {
-        driver.findElement(By.xpath("//button[@class = 'button-1 payment-info-next-step-button']")).click();
+        click(By.xpath("//button[@class = 'button-1 payment-info-next-step-button']"));
     }
     public void clickContinueConfirmOrder() {
-        driver.findElement(By.xpath("//button[@class = 'button-1 confirm-order-next-step-button']")).click();
+        click(By.xpath("//button[@class = 'button-1 confirm-order-next-step-button']"));
     }
     public void compareTotals() {
-        String productTotal = driver.findElement(By.xpath("//span[@class = 'product-subtotal']")).getText();
-        String orderTotal =driver.findElement(By.xpath("//span[@class = 'value-summary']")).getText();
-//        productTotal = productTotal.replace("$","");
-//        orderTotal = orderTotal.replace("$","");
+        String productTotal = find(By.xpath("//span[@class = 'product-subtotal']")).getText();
+        String orderTotal =find(By.xpath("//span[@class = 'value-summary']")).getText();
         assertEquals(productTotal,orderTotal);
     }
+    public void successfullOrderConfirmation() {
+        assertTrue(isDisplayed(By.xpath("//div [@class = 'page checkout-page order-completed-page']")));
 
+    }
 
 }

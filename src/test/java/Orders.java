@@ -64,7 +64,7 @@ class OrdersTest{
         cartPage.markTosCheckbox();
         cartPage.clickCheckoutButton();
         //login screen
-        driver.findElement(By.xpath("//button[@class = 'button-1 checkout-as-guest-button']")).click();
+        checkoutPage.click(By.xpath("//button[@class = 'button-1 checkout-as-guest-button']"));
         //checkout screen
         checkoutPage.provideFirstName();
         checkoutPage.provideLastName();
@@ -80,5 +80,6 @@ class OrdersTest{
         checkoutPage.clickContinuePaymentInfo();
         checkoutPage.compareTotals();
         checkoutPage.clickContinueConfirmOrder();
+        checkoutPage.successfullOrderConfirmation();
     }
 }
