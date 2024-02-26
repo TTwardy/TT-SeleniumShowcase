@@ -1,8 +1,3 @@
-import static java.lang.invoke.MethodHandles.lookup;
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.time.Duration;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +6,11 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
+
+import java.time.Duration;
+
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class BasePage {
     static final Logger log = getLogger(lookup().lookupClass());
@@ -53,6 +53,10 @@ public class BasePage {
             return false;
         }
         return true;
+    }
+
+    public void waitForVisibility(By element) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(element));
     }
 
 }

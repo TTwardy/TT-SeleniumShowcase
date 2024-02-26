@@ -38,7 +38,7 @@ public class UserRegistration {
     }
 
     @Test
-    void userRegistration () {
+    void userRegistration() {
         driver.get("https://demo.nopcommerce.com/");
         registrationPage.clickRegister();
         registrationPage.chooseGender();

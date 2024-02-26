@@ -3,17 +3,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.time.Duration;
 
-public class CartPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class CartPage extends BasePage {
 
     public CartPage(WebDriver driver) {
-        this.driver = driver;
-        //wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        super(driver);
         PageFactory.initElements(driver, this);
     }
 
@@ -48,7 +44,7 @@ public class CartPage {
 
     public void checkTosAlert() {
         String termsText = driver.findElement(By.xpath("//div[@id = 'terms-of-service-warning-box']/p")).getText();
-        assertEquals("Please accept the terms of service before the next step.",termsText);
+        assertEquals("Please accept the terms of service before the next step.", termsText);
     }
 }
 

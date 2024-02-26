@@ -39,14 +39,11 @@ public class Main {
             //cart
             driver.findElement(By.cssSelector("[class=cart-label]")).click();
             driver.quit();
-        }
-
-        catch (Exception NoSuchElementException){
+        } catch (Exception NoSuchElementException) {
             System.out.println("ERROR, quitting\n " + NoSuchElementException.getMessage());
             NoSuchElementException.printStackTrace();
             driver.quit();
-        }
-        finally {
+        } finally {
             System.out.println("press key to finish");
             scanner.next();
             driver.quit();

@@ -1,10 +1,8 @@
-import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.Random;
@@ -14,6 +12,7 @@ public class RegistrationPage extends BasePage {
     String randomPassword;
     String email;
     Random random = new Random();
+
     public RegistrationPage(WebDriver driver) {
         super(driver);
     }
@@ -30,25 +29,29 @@ public class RegistrationPage extends BasePage {
     private WebElement password;
     @FindBy(id = "ConfirmPassword")
     private WebElement confirmPassword;
+
     public void clickRegister() {
         registerLink.click();
     }
+
     public void chooseGender() {
         WebElement radioMale = find(By.xpath("//input[@value = 'M']"));
         WebElement radioFemale = find(By.xpath("//input[@value = 'F']"));
-        if (random.nextInt(2)==0){
+        if (random.nextInt(2) == 0) {
             radioMale.click();
-        }
-        else {
+        } else {
             radioFemale.click();
         }
     }
+
     public void provideFirstName() {
-        firstName.sendKeys(RandomStringUtils.randomAlphabetic(1,10));
+        firstName.sendKeys(RandomStringUtils.randomAlphabetic(1, 10));
     }
+
     public void provideLastName() {
-        lastName.sendKeys(RandomStringUtils.randomAlphabetic(1,10));
+        lastName.sendKeys(RandomStringUtils.randomAlphabetic(1, 10));
     }
+
     public void setBirthDate() {//improve day selection, even though site allows it
         Select day = new Select(find(By.name("DateOfBirthDay")));
         Select month = new Select(find(By.name("DateOfBirthMonth")));
@@ -56,23 +59,45 @@ public class RegistrationPage extends BasePage {
 
         day.selectByValue(String.valueOf(random.nextInt(32)));
         month.selectByValue(String.valueOf(random.nextInt(13)));
-        year.selectByValue(String.valueOf(random.nextInt(1950,2011)));
+        year.selectByValue(String.valueOf(random.nextInt(1950, 2011)));
     }
+
     public void provideEmail() {
-        email = RandomStringUtils.randomAlphabetic(1,5)+"@test.com";
+        email = RandomStringUtils.randomAlphabetic(1, 5) + "@test.com";
         emailField.sendKeys(email);
     }
+
     public void providePassword() {
-        randomPassword = RandomStringUtils.randomAlphabetic(6,15);
+        randomPassword = RandomStringUtils.randomAlphabetic(6, 15);
 
         password.sendKeys(randomPassword);
         confirmPassword.sendKeys(randomPassword);
     }
+
     public void clickRegisterButton() {
         find(By.id("register-button")).click();
     }
+
     public void showUserLoginData() {
-        System.out.println("Email: "+email);
-        System.out.println("Password: "+randomPassword);
+        System.out.println("Email: " + email);
+        System.out.println("Password: " + randomPassword);
+    }
+
+    public String[] getUserLoginData() {
+        String[] credentials = new String[2];
+        credentials[0] = email;
+        credentials[1] = randomPassword;
+        return credentials;
+    }
+
+    public String[] registerUser() {
+        clickRegister();
+        chooseGender();
+        provideFirstName();
+        provideLastName();
+        setBirthDate();
+        provideEmail();
+        providePassword();
+        return getUserLoginData();
     }
 }
