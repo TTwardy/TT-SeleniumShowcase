@@ -98,6 +98,15 @@ public class RegistrationPage extends BasePage {
         setBirthDate();
         provideEmail();
         providePassword();
+        clickRegisterButton();
         return getUserLoginData();
+    }
+
+    public void logIn(String[] credentials) {
+        click(By.cssSelector("a[href= '/login?returnUrl=%2F']"));
+        type(By.className("email"), credentials[0]);
+        type(By.className("password"), credentials[1]);
+        click(By.cssSelector("[class= 'button-1 login-button']"));
+
     }
 }

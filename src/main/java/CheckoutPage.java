@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +40,14 @@ public class CheckoutPage extends BasePage {
         provideFirstName();
         provideLastName();
         provideEmail();
+        chooseCountry();
+        provideCity();
+        provideZip();
+        provideAddress1();
+        providePhoneNo();
+    }
+
+    public void provideBillingAddressRegisteredUser() {
         chooseCountry();
         provideCity();
         provideZip();
@@ -100,9 +110,16 @@ public class CheckoutPage extends BasePage {
     }
 
     public void compareTotals() {
-        String productTotal = find(By.xpath("//span[@class = 'product-subtotal']")).getText();
-        String orderTotal = find(By.xpath("//span[@class = 'value-summary']")).getText();
-        assertEquals(productTotal, orderTotal);
+        double totalAmount = 0;
+        List<WebElement> productsTotal = driver.findElements(By.xpath("//td[@class = 'subtotal']"));
+        for (WebElement productTotal : productsTotal) {
+            String textAmount = productTotal.getText().trim().replace(",", "").replace("$", "");
+            double amount = Double.parseDouble(textAmount);
+            totalAmount += amount;
+        }
+        String textAmount = find(By.xpath("//span[@class = 'value-summary']")).getText().trim().replace(",", "").replace("$", "");
+        double orderTotal = Double.parseDouble(textAmount);
+        assertEquals(totalAmount, orderTotal);
     }
 
     public void successfullOrderConfirmation() {

@@ -22,6 +22,7 @@ class OrdersTest {
     CheckoutPage checkoutPage;
     Dimension dimension = new Dimension(1800, 1000);
     Actions actions;
+    RegistrationPage registrationPage;
 
 
     @BeforeEach
@@ -35,11 +36,41 @@ class OrdersTest {
         driver.manage().window().setSize(dimension);
         cartPage = new CartPage(driver);
         checkoutPage = new CheckoutPage(driver);
+        registrationPage = new RegistrationPage(driver);
     }
 
     @AfterEach
     void tearDown() {
         driver.quit();
+    }
+
+    @Test
+    public void RegisteredUserOrder() {
+        driver.get("https://demo.nopcommerce.com/");
+        registrationPage.logIn(registrationPage.registerUser());
+        WebElement computersTab = driver.findElement(By.cssSelector("[href= '/computers']"));
+        actions.moveToElement(computersTab).click().build().perform(); //add mouse hover and click Notebooks directly
+        cartPage.click(By.cssSelector("a[href = '/notebooks'] [title= 'Show products in category Notebooks']"));
+        cartPage.click(By.xpath("//div[@class='details']//h2[@class='product-title']/a[contains(text(), 'Apple MacBook Pro 13-inch')]/ancestor::div[@class='details']//button[@class='button-2 product-box-add-to-cart-button']"));
+        cartPage.click(By.xpath("//button[@class = 'button-1 add-to-cart-button']"));
+        cartPage.click(By.cssSelector("a[href= '/apparel']"));
+        cartPage.click(By.cssSelector("a[href= '/accessories'] [title= 'Show products in category Accessories']"));
+        cartPage.click(By.xpath("//div[@class='details']//h2[@class='product-title']/a[contains(text(), 'Ray Ban Aviator Sunglasses')]/ancestor::div[@class='details']//button[@class='button-2 product-box-add-to-cart-button']"));
+        cartPage.clickCartLink();
+        cartPage.clickCheckoutButton();
+        cartPage.checkTosAlert();
+        cartPage.clickClosePopupButton();
+        cartPage.markTosCheckbox();
+        cartPage.clickCheckoutButton();
+
+        checkoutPage.provideBillingAddressRegisteredUser();
+        checkoutPage.clickContinueAddress();
+        checkoutPage.clickContinueShipping();
+        checkoutPage.clickContinuePaymentMethod();
+        checkoutPage.clickContinuePaymentInfo();
+        checkoutPage.compareTotals();
+        checkoutPage.clickContinueConfirmOrder();
+        checkoutPage.successfullOrderConfirmation();
     }
 
     @Test
@@ -71,10 +102,5 @@ class OrdersTest {
         checkoutPage.successfullOrderConfirmation();
     }
 
-    public void RegisteredUserOrder() {
-        driver.get("https://demo.nopcommerce.com/");
-        WebElement computersTab = driver.findElement(By.cssSelector("[href= '/computers']"));
-        actions.moveToElement(computersTab).click().build().perform(); //add mouse hover and click Notebooks directly
-        cartPage.click(By.cssSelector("[href = '/notebooks']"));
-    }
+
 }
