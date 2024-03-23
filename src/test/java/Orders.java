@@ -98,6 +98,7 @@ class OrdersTest {
         checkoutPage.clickContinuePaymentMethod();
         checkoutPage.clickContinuePaymentInfo();
         checkoutPage.compareTotals();
+        BasePage.takeScreenshot(driver);
         checkoutPage.clickContinueConfirmOrder();
         checkoutPage.successfullOrderConfirmation();
     }

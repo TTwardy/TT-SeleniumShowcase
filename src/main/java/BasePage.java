@@ -1,15 +1,19 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 
 import static java.lang.invoke.MethodHandles.lookup;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class BasePage {
@@ -57,6 +61,23 @@ public class BasePage {
 
     public void waitForVisibility(By element) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+    }
+
+    public static void takeScreenshot(WebDriver driver) {
+        TakesScreenshot ts = (TakesScreenshot) driver;
+        File screenshot = ts.getScreenshotAs(OutputType.FILE);
+        BasePage.log.debug("Screenshot created on {}", screenshot);
+
+        Path destination = Paths.get("screenshot.png");
+        try {
+            Files.move(screenshot.toPath(), destination, REPLACE_EXISTING);
+            BasePage.log.debug("Screenshot moved to {}", destination);
+
+            assertThat(destination).exists();
+        } catch (IOException e) {
+            // Handle the IOException here
+            e.printStackTrace(); // You might want to log the exception instead of printing stack trace
+        }
     }
 
 }
